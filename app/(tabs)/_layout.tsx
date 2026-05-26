@@ -34,7 +34,7 @@ export default function TabsLayout() {
           COLORS.primary,
 
         tabBarInactiveTintColor:
-          COLORS.textLight,
+          COLORS.textSecondary,
       }}
     >
       <Tabs.Screen
