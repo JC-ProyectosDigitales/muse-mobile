@@ -4,7 +4,11 @@
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~56.0.13",
+<<<<<<< HEAD
     "eslint-config-expo": "~56.0.4",
+=======
+    "@expo/vector-icons": "^15.0.2",
+>>>>>>> c529c9a (stable expo sdk 56 setup)
     "expo": "~56.0.4",
     "expo-constants": "~56.0.15",
     "expo-device": "~56.0.4",
@@ -25,13 +29,14 @@
     "react-native-reanimated": "4.3.1",
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "4.25.2",
+    "react-native-svg": "15.15.4",
     "react-native-web": "~0.21.0",
     "react-native-worklets": "0.8.3",
     "zustand": "^5.0.13"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
-    "typescript": "~6.0.3"
+    "typescript": "^5.8.3"
   },
   "scripts": {
     "start": "expo start",
