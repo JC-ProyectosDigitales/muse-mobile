@@ -1,7 +1,13 @@
 export const TYPOGRAPHY = {
-  hero: 34,
+  hero: 36,
+
   title: 28,
-  subtitle: 18,
+
+  heading: 22,
+
   body: 16,
-  caption: 13,
+
+  caption: 14,
+
+  small: 12,
 }
