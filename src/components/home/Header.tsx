@@ -1,27 +1,27 @@
-import { View, Text, StyleSheet } from 'react-native'
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 
-import {
-  COLORS,
-  SPACING,
-  TYPOGRAPHY,
-} from '@/src/theme'
+import { COLORS } from '@/src/theme/colors'
+import { SPACING } from '@/src/theme/spacing'
+import { TYPOGRAPHY } from '@/src/theme/typography'
+import { RADIUS } from '@/src/theme/radius'
 
-export default function Header() {
+export function Header() {
   return (
     <View style={styles.container}>
-      <View>
+      <View style={styles.textContainer}>
         <Text style={styles.greeting}>
-          Good Morning
+          Hola, Ana ✨
         </Text>
 
         <Text style={styles.title}>
-          MUSE
+          ¿Qué look creamos hoy?
         </Text>
       </View>
 
       <View style={styles.avatar}>
         <Text style={styles.avatarText}>
-          JC
+          A
         </Text>
       </View>
     </View>
@@ -34,27 +34,34 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
 
+    paddingHorizontal: SPACING.lg,
+    paddingTop: SPACING.xl,
     marginBottom: SPACING.xl,
   },
 
-  greeting: {
-    fontSize: TYPOGRAPHY.body,
-    color: COLORS.textSecondary,
+  textContainer: {
+    flex: 1,
+    paddingRight: SPACING.md,
+  },
 
-    marginBottom: 4,
+  greeting: {
+    ...TYPOGRAPHY.body,
+
+    color: COLORS.textSecondary,
+    marginBottom: 6,
   },
 
   title: {
-    fontSize: TYPOGRAPHY.hero,
-    fontWeight: '700',
+    ...TYPOGRAPHY.hero,
+
     color: COLORS.text,
+    fontWeight: '700',
     letterSpacing: -1,
   },
 
   avatar: {
     width: 52,
     height: 52,
-
     borderRadius: 999,
 
     backgroundColor: COLORS.primary,
@@ -64,8 +71,9 @@ const styles = StyleSheet.create({
   },
 
   avatarText: {
-    color: COLORS.white,
+    ...TYPOGRAPHY.h3,
+
+    color: COLORS.primary,
     fontWeight: '700',
-    fontSize: 18,
   },
 })

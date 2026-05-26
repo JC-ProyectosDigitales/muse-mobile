@@ -1,13 +1,36 @@
 export const TYPOGRAPHY = {
-  hero: 36,
+  hero: {
+    fontSize: 40,
+    lineHeight: 46,
+  },
 
-  title: 28,
+  h1: {
+    fontSize: 32,
+    lineHeight: 38,
+  },
 
-  heading: 22,
+  h2: {
+    fontSize: 24,
+    lineHeight: 30,
+  },
 
-  body: 16,
+  h3: {
+    fontSize: 20,
+    lineHeight: 26,
+  },
 
-  caption: 14,
+  body: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
 
-  small: 12,
-}
+  bodySmall: {
+    fontSize: 14,
+    lineHeight: 20,
+  },
+
+  caption: {
+    fontSize: 12,
+    lineHeight: 16,
+  },
+} as const

@@ -1,7 +1,7 @@
 import {
-  View,
-  Text,
   StyleSheet,
+  Text,
+  View,
 } from 'react-native'
 
 import {
@@ -15,7 +15,7 @@ interface Props {
   subtitle?: string
 }
 
-export default function Header({
+export function SectionTitle({
   title,
   subtitle,
 }: Props) {
@@ -36,18 +36,26 @@ export default function Header({
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: SPACING.xl,
+    marginBottom:
+      SPACING.lg,
   },
 
   title: {
-    ...TYPOGRAPHY.hero,
+    fontSize:
+      TYPOGRAPHY.h1.fontSize,
+
     fontWeight: '700',
+
     color: COLORS.text,
   },
 
   subtitle: {
-    marginTop: SPACING.sm,
-    ...TYPOGRAPHY.body,
-    color: COLORS.textSecondary,
+    marginTop: 6,
+
+    color:
+      COLORS.textSecondary,
+
+    fontSize:
+      TYPOGRAPHY.body.fontSize,
   },
 })

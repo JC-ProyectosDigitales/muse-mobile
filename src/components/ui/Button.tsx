@@ -1,7 +1,8 @@
 import {
-  TouchableOpacity,
-  Text,
+  Pressable,
   StyleSheet,
+  Text,
+  ViewStyle,
 } from 'react-native'
 
 import {
@@ -13,23 +14,28 @@ import {
 
 interface Props {
   title: string
-  onPress?: () => void
+  onPress: () => void
+  style?: ViewStyle
 }
 
-export default function Button({
+export function Button({
   title,
   onPress,
+  style,
 }: Props) {
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
+    <Pressable
       onPress={onPress}
-      style={styles.button}
+      style={({ pressed }) => [
+        styles.button,
+        pressed && styles.pressed,
+        style,
+      ]}
     >
       <Text style={styles.text}>
         {title}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 
@@ -37,21 +43,35 @@ const styles = StyleSheet.create({
   button: {
     height: 56,
 
-    borderRadius: RADIUS.md,
+    backgroundColor:
+      COLORS.primary,
 
-    backgroundColor: COLORS.primary,
+    borderRadius:
+      RADIUS.full,
 
     justifyContent: 'center',
     alignItems: 'center',
 
-    paddingHorizontal: SPACING.lg,
+    paddingHorizontal:
+      SPACING.lg,
+  },
+
+  pressed: {
+    opacity: 0.85,
+
+    transform: [
+      {
+        scale: 0.98,
+      },
+    ],
   },
 
   text: {
-    fontSize: TYPOGRAPHY.body,
+    color: COLORS.white,
+
+    fontSize:
+      TYPOGRAPHY.body.fontSize,
 
     fontWeight: '600',
-
-    color: COLORS.text,
   },
 })

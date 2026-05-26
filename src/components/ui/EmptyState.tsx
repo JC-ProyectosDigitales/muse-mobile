@@ -55,8 +55,7 @@ const styles = StyleSheet.create({
   title: {
     marginTop: SPACING.lg,
 
-    fontSize: TYPOGRAPHY.heading,
-
+    ...TYPOGRAPHY.h3,
     fontWeight: '700',
 
     color: COLORS.text,
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
   description: {
     marginTop: SPACING.sm,
 
-    fontSize: TYPOGRAPHY.body,
+    ...TYPOGRAPHY.body,
 
     textAlign: 'center',
 

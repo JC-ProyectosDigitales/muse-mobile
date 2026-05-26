@@ -1,29 +1,35 @@
+import React from 'react'
 import {
-  View,
-  Text,
   StyleSheet,
+  Text,
+  View,
 } from 'react-native'
 
-import {
-  COLORS,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from '@/src/theme'
+import { COLORS } from '@/src/theme/colors'
+import { RADIUS } from '@/src/theme/radius'
+import { SPACING } from '@/src/theme/spacing'
+import { TYPOGRAPHY } from '@/src/theme/typography'
 
-export default function RecentOutfitCard() {
+type Props = {
+  title: string
+  subtitle: string
+}
+
+export function RecentOutfitCard({
+  title,
+  subtitle,
+}: Props) {
   return (
     <View style={styles.card}>
       <View style={styles.image} />
 
       <View style={styles.content}>
         <Text style={styles.title}>
-          Minimal Beige Fit
+          {title}
         </Text>
 
         <Text style={styles.subtitle}>
-          Smart Casual
+          {subtitle}
         </Text>
       </View>
     </View>
@@ -32,20 +38,32 @@ export default function RecentOutfitCard() {
 
 const styles = StyleSheet.create({
   card: {
+    width: 220,
+
     backgroundColor: COLORS.surface,
 
     borderRadius: RADIUS.xl,
 
     overflow: 'hidden',
 
-    marginBottom: SPACING.lg,
+    marginRight: SPACING.md,
 
-    ...SHADOWS.card,
+    shadowColor: '#000',
+    shadowOpacity: 0.04,
+    shadowRadius: 16,
+
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+
+    elevation: 2,
   },
 
   image: {
-    height: 220,
-    backgroundColor: '#E9E4DD',
+    height: 240,
+
+    backgroundColor: COLORS.surface,
   },
 
   content: {
@@ -53,15 +71,17 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    fontSize: TYPOGRAPHY.title,
-    fontWeight: '700',
-    color: COLORS.text,
+    ...TYPOGRAPHY.h3,
 
-    marginBottom: 4,
+    color: COLORS.text,
+    fontWeight: '700',
+
+    marginBottom: 6,
   },
 
   subtitle: {
+    ...TYPOGRAPHY.body,
+
     color: COLORS.textSecondary,
-    fontSize: TYPOGRAPHY.body,
   },
 })

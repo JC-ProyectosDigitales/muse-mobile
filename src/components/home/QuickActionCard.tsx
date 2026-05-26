@@ -1,67 +1,93 @@
+import React from 'react'
 import {
-  TouchableOpacity,
-  Text,
+  Pressable,
   StyleSheet,
+  Text,
+  View,
 } from 'react-native'
 
-import {
-  COLORS,
-  RADIUS,
-  SHADOWS,
-  SPACING,
-  TYPOGRAPHY,
-} from '@/src/theme'
+import { COLORS } from '@/src/theme/colors'
+import { RADIUS } from '@/src/theme/radius'
+import { SPACING } from '@/src/theme/spacing'
+import { TYPOGRAPHY } from '@/src/theme/typography'
 
-interface Props {
+type Props = {
+  emoji: string
   title: string
-  icon: string
+  onPress?: () => void
 }
 
-export default function QuickActionCard({
+export function QuickActionCard({
+  emoji,
   title,
+  onPress,
 }: Props) {
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
+    <Pressable
+      onPress={onPress}
       style={styles.card}
     >
-      <Text style={styles.emoji}>
-        ✨
-      </Text>
+      <View style={styles.iconContainer}>
+        <Text style={styles.emoji}>
+          {emoji}
+        </Text>
+      </View>
 
       <Text style={styles.title}>
         {title}
       </Text>
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 
 const styles = StyleSheet.create({
   card: {
-    width: 160,
-    height: 120,
+    width: '48%',
 
     backgroundColor: COLORS.surface,
 
     borderRadius: RADIUS.xl,
 
-    padding: SPACING.lg,
+    paddingVertical: SPACING.xl,
+    paddingHorizontal: SPACING.lg,
 
-    justifyContent:
-      'space-between',
+    marginBottom: SPACING.md,
 
-    marginRight: SPACING.md,
+    shadowColor: '#000',
+    shadowOpacity: 0.04,
+    shadowRadius: 16,
 
-    ...SHADOWS.card,
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+
+    elevation: 2,
+  },
+
+  iconContainer: {
+    width: 54,
+    height: 54,
+
+    borderRadius: 18,
+
+    backgroundColor: COLORS.primary,
+
+    justifyContent: 'center',
+    alignItems: 'center',
+
+    marginBottom: SPACING.md,
   },
 
   emoji: {
-    fontSize: 28,
+    fontSize: 26,
   },
 
   title: {
-    fontSize: TYPOGRAPHY.body,
-    fontWeight: '600',
+    ...TYPOGRAPHY.body,
+
     color: COLORS.text,
+    fontWeight: '600',
+    lineHeight: 24,
   },
 })
