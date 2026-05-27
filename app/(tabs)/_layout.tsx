@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
 
-    marginTop: -10,
+    marginTop: -5,
 
     ...SHADOWS.floating,
   },
