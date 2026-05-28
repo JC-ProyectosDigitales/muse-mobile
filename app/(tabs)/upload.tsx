@@ -1,132 +1,79 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  Image,
-} from 'react-native'
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
-import {
-  ArrowLeft,
-  Camera,
-  ImagePlus,
-} from 'lucide-react-native'
+import { ArrowLeft, Camera, ImagePlus } from "lucide-react-native";
 
-import {
-  COLORS,
-  SPACING,
-  TYPOGRAPHY,
-} from '@/src/theme'
+import { COLORS, SPACING, TYPOGRAPHY } from "@/src/theme";
 
 export default function UploadScreen() {
   return (
     <View style={styles.container}>
-
       <View style={styles.header}>
         <Pressable style={styles.backButton}>
-          <ArrowLeft
-            size={20}
-            color={COLORS.text}
-          />
+          <ArrowLeft size={20} color={COLORS.text} />
         </Pressable>
       </View>
 
-      <Text style={styles.title}>
-        Subir prenda
-      </Text>
+      <Text style={styles.title}>Subir prenda</Text>
 
       <Text style={styles.subtitle}>
-        Toma una foto{'\n'}
-        o elige de tu galería
+        Toma una foto{"\n"}o elige de tu galería
       </Text>
 
       <View style={styles.uploadBox}>
-        <Camera
-          size={42}
-          color={
-            COLORS.textSecondary
-          }
-        />
+        <Camera size={42} color={COLORS.textSecondary} />
       </View>
 
       <Pressable style={styles.primaryButton}>
-        <Text
-          style={
-            styles.primaryButtonText
-          }
-        >
-          Tomar foto
-        </Text>
+        <Text style={styles.primaryButtonText}>Tomar foto</Text>
       </Pressable>
 
-      <Text style={styles.separator}>
-        o
-      </Text>
+      <Text style={styles.separator}>o</Text>
 
       <Pressable style={styles.secondaryButton}>
-        <ImagePlus
-          size={18}
-          color={COLORS.text}
-        />
+        <ImagePlus size={18} color={COLORS.text} />
 
-        <Text
-          style={
-            styles.secondaryButtonText
-          }
-        >
-          Elegir de galería
-        </Text>
+        <Text style={styles.secondaryButtonText}>Elegir de galería</Text>
       </Pressable>
 
       <View style={styles.tipContainer}>
-        <Text style={styles.tipTitle}>
-          Tip para mejores resultados
-        </Text>
+        <Text style={styles.tipTitle}>Tip para mejores resultados</Text>
 
-        <View style={styles.tipList}>
-          <Text style={styles.tipItem}>
-            • Fondo neutro
-          </Text>
+        <View style={styles.tipContent}>
+          <View style={styles.tipList}>
+            <Text style={styles.tipItem}>• Fondo neutro</Text>
 
-          <Text style={styles.tipItem}>
-            • Buena iluminación
-          </Text>
+            <Text style={styles.tipItem}>• Buena iluminación</Text>
 
-          <Text style={styles.tipItem}>
-            • Prenda completa visible
-          </Text>
-        </View>
+            <Text style={styles.tipItem}>• Prenda completa visible</Text>
+          </View>
 
-        <View style={styles.previewContainer}>
           <Image
             source={{
-              uri: 'https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=600&auto=format&fit=crop',
+              uri: "https://images.unsplash.com/photo-1529139574466-a303027c1d8b?q=80&w=600&auto=format&fit=crop",
             }}
             style={styles.preview}
           />
         </View>
       </View>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
 
-    backgroundColor:
-      COLORS.background,
+    backgroundColor: COLORS.background,
 
     paddingTop: 50,
 
-    paddingHorizontal:
-      SPACING.lg,
+    paddingHorizontal: SPACING.lg,
   },
 
   header: {
-    flexDirection: 'row',
+    flexDirection: "row",
 
-    alignItems: 'center',
+    alignItems: "center",
 
     marginBottom: 20,
   },
@@ -137,22 +84,19 @@ const styles = StyleSheet.create({
 
     borderRadius: 14,
 
-    backgroundColor:
-      COLORS.surface,
+    backgroundColor: COLORS.surface,
 
-      justifyContent: 'center',
+    justifyContent: "center",
 
-      alignItems: 'center',
+    alignItems: "center",
   },
 
   title: {
-    fontSize:
-      TYPOGRAPHY.h1.fontSize,
+    fontSize: TYPOGRAPHY.h1.fontSize,
 
-    lineHeight:
-      TYPOGRAPHY.h1.lineHeight,
+    lineHeight: TYPOGRAPHY.h1.lineHeight,
 
-    fontWeight: '700',
+    fontWeight: "700",
 
     color: COLORS.text,
 
@@ -160,14 +104,11 @@ const styles = StyleSheet.create({
   },
 
   subtitle: {
-    fontSize:
-      TYPOGRAPHY.body.fontSize,
+    fontSize: TYPOGRAPHY.body.fontSize,
 
-    lineHeight:
-      TYPOGRAPHY.body.lineHeight,
+    lineHeight: TYPOGRAPHY.body.lineHeight,
 
-    color:
-      COLORS.textSecondary,
+    color: COLORS.textSecondary,
 
     marginBottom: 20,
   },
@@ -179,17 +120,15 @@ const styles = StyleSheet.create({
 
     borderWidth: 2,
 
-    borderStyle: 'dashed',
+    borderStyle: "dashed",
 
-    borderColor:
-      COLORS.border,
+    borderColor: COLORS.border,
 
-    backgroundColor:
-      COLORS.surface,
+    backgroundColor: COLORS.surface,
 
-    justifyContent: 'center',
+    justifyContent: "center",
 
-    alignItems: 'center',
+    alignItems: "center",
 
     marginBottom: 28,
   },
@@ -199,33 +138,29 @@ const styles = StyleSheet.create({
 
     borderRadius: 18,
 
-    backgroundColor:
-      COLORS.primary,
+    backgroundColor: COLORS.primary,
 
-    justifyContent: 'center',
+    justifyContent: "center",
 
-    alignItems: 'center',
+    alignItems: "center",
 
     marginBottom: 12,
   },
 
   primaryButtonText: {
-    fontSize:
-      TYPOGRAPHY.body.fontSize,
+    fontSize: TYPOGRAPHY.body.fontSize,
 
-    lineHeight:
-      TYPOGRAPHY.body.lineHeight,
+    lineHeight: TYPOGRAPHY.body.lineHeight,
 
-    fontWeight: '600',
+    fontWeight: "600",
 
     color: COLORS.white,
   },
 
   separator: {
-    textAlign: 'center',
+    textAlign: "center",
 
-    color:
-      COLORS.textSecondary,
+    color: COLORS.textSecondary,
 
     marginBottom: 12,
   },
@@ -235,19 +170,17 @@ const styles = StyleSheet.create({
 
     borderRadius: 18,
 
-    backgroundColor:
-      COLORS.surface,
+    backgroundColor: COLORS.surface,
 
     borderWidth: 1,
 
-    borderColor:
-      COLORS.border,
+    borderColor: COLORS.border,
 
-    flexDirection: 'row',
+    flexDirection: "row",
 
-    justifyContent: 'center',
+    justifyContent: "center",
 
-    alignItems: 'center',
+    alignItems: "center",
 
     marginBottom: 28,
   },
@@ -255,53 +188,54 @@ const styles = StyleSheet.create({
   secondaryButtonText: {
     marginLeft: 10,
 
-    fontSize:
-      TYPOGRAPHY.body.fontSize,
+    fontSize: TYPOGRAPHY.body.fontSize,
 
-    lineHeight:
-      TYPOGRAPHY.body.lineHeight,
+    lineHeight: TYPOGRAPHY.body.lineHeight,
 
     color: COLORS.text,
 
-    fontWeight: '500',
+    fontWeight: "500",
   },
 
   tipContainer: {
-    backgroundColor:
-      COLORS.surface,
+    backgroundColor: COLORS.surface,
 
     borderRadius: 24,
 
     padding: 20,
   },
 
+  tipContent: {
+    flexDirection: "row",
+
+    justifyContent: "space-between",
+
+    alignItems: "center",
+  },
+
+  tipList: {
+    flex: 1,
+    marginRight: 12,
+  },
+
   tipTitle: {
-    fontSize:
-      TYPOGRAPHY.body.fontSize,
+    fontSize: TYPOGRAPHY.body.fontSize,
 
-    lineHeight:
-      TYPOGRAPHY.body.lineHeight,
+    lineHeight: TYPOGRAPHY.body.lineHeight,
 
-    fontWeight: '600',
+    fontWeight: "600",
 
     color: COLORS.text,
 
     marginBottom: 14,
   },
 
-  tipList: {
-    marginBottom: 12,
-  },
-
   tipItem: {
-    fontSize:
-      TYPOGRAPHY.bodySmall.fontSize,
+    fontSize: TYPOGRAPHY.bodySmall.fontSize,
 
-    lineHeight:
-      TYPOGRAPHY.bodySmall.lineHeight,
+    lineHeight: TYPOGRAPHY.bodySmall.lineHeight,
 
-    color:
-      COLORS.textSecondary,
+    color: COLORS.textSecondary,
 
     marginBottom: 8,
   },
@@ -311,10 +245,10 @@ const styles = StyleSheet.create({
   },
 
   preview: {
-    width: '100%',
+    width: 72,
 
-    height: 180,
+    height: 96,
 
-    borderRadius: 18,
+    borderRadius: 12,
   },
-})
+});

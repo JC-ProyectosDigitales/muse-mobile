@@ -8,6 +8,10 @@ import {
 } from 'react-native'
 
 import {
+  router
+} from 'expo-router'
+
+import {
   Heart,
 } from 'lucide-react-native'
 
@@ -139,6 +143,14 @@ export default function OutfitsScreen() {
           <Pressable
             key={outfit.id}
             style={styles.card}
+            onPress={() =>
+              router.push({
+                pathname: '/outfit-detail',
+                params: {
+                  id: outfit.id,
+                },
+              })
+            }
           >
             <Pressable
               style={styles.favorite}
