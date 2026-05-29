@@ -4,7 +4,38 @@ import { ArrowLeft, Camera, ImagePlus } from "lucide-react-native";
 
 import { COLORS, SPACING, TYPOGRAPHY } from "@/src/theme";
 
+import { useGarmentStore } from "@/src/store/garmentStore";
+
+import { router } from "expo-router";
+
+const addGarment =
+  useGarmentStore(
+    state => state.addGarment
+  )
+
 export default function UploadScreen() {
+  const addGarment =
+    useGarmentStore(
+      state => state.addGarment
+    )
+
+  const handleUpload = () => {
+    addGarment ({
+      id: Date.now().toString(),
+
+      imageUrl:       'https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80&w=800&auto=format&fit=crop',
+
+      category: 'Blusas',
+
+      color: 'Negro',
+
+      createdAt:
+        new Date().toISOString(),
+    })
+
+    router.push('/closet')
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -23,7 +54,14 @@ export default function UploadScreen() {
         <Camera size={42} color={COLORS.textSecondary} />
       </View>
 
-      <Pressable style={styles.primaryButton}>
+      <Pressable style={styles.primaryButton} onPress={() => addGarment({
+        id: Date.now().toString(),
+        imageUrl: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop',
+        category: 'Blusas',
+        color: 'Negro',
+        createdAt: new Date().toISOString(),
+      })
+      }>
         <Text style={styles.primaryButtonText}>Tomar foto</Text>
       </Pressable>
 

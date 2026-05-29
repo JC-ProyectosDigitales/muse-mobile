@@ -14,10 +14,24 @@ import {
 } from 'lucide-react-native'
 
 import {
+  useEffect,
+} from 'react'
+
+import {
   COLORS,
   SPACING,
   TYPOGRAPHY,
 } from '@/src/theme'
+
+import {
+  getGarments,
+} from '@/src/services/garment.service'
+
+import {
+  useGarmentStore,
+} from '@/src/store/garmentStore'
+
+import {testInsert} from '@/src/services/testUpload'
 
 const categories = [
   'Todo',
@@ -27,57 +41,18 @@ const categories = [
   'Zapatos',
 ]
 
-const garments = [
-  {
-    id: 1,
-    image:
-      'https://images.unsplash.com/photo-1564257631407-4deb1f99d992?q=80&w=800&auto=format&fit=crop',
-  },
-
-  {
-    id: 2,
-    image:
-      'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=800&auto=format&fit=crop',
-  },
-
-  {
-    id: 3,
-    image:
-      'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop',
-  },
-
-  {
-    id: 4,
-    image:
-      'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=800&auto=format&fit=crop',
-  },
-
-  {
-    id: 5,
-    image:
-      'https://images.unsplash.com/photo-1583496661160-fb5886a13d77?q=80&w=800&auto=format&fit=crop',
-  },
-
-  {
-    id: 6,
-    image:
-      'https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=800&auto=format&fit=crop',
-  },
-
-  {
-    id: 7,
-    image:
-      'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=800&auto=format&fit=crop',
-  },
-
-  {
-    id: 8,
-    image:
-      'https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&w=800&auto=format&fit=crop',
-  },
-]
-
 export default function ClosetScreen() {
+
+  const garments =
+    useGarmentStore(
+      state => state.garments
+    )
+
+  useEffect(() => {
+    testInsert()
+  }, [])
+  
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -161,23 +136,37 @@ export default function ClosetScreen() {
         {/* GRID */}
 
         <View style={styles.grid}>
-          {garments.map(
-            garment => (
-              <Pressable
-                key={garment.id}
-                style={styles.card}
-              >
-                <Image
-                  source={{
-                    uri: garment.image,
-                  }}
-                  style={
-                    styles.image
-                  }
-                  resizeMode="contain"
-                />
-              </Pressable>
-            ),
+          {garments.length > 0 && 
+            garments.map(
+              garment => (
+                <Pressable
+                  key={garment.id}
+                  style={styles.card}
+                >
+                  <Image
+                    source={{
+                      uri: garment.imageUrl,
+                    }}
+                    style={
+                      styles.image
+                    }
+                    resizeMode="contain"
+                  />
+                </Pressable>
+              ),
+            )}
+
+          {garments.length === 0 && (
+            <Text
+              style={{
+                width: '100%',
+                textAlign: 'center',
+                color: COLORS.textSecondary,
+                marginTop: 30,
+              }}
+            >
+              Aún no has agregado prendas
+            </Text>
           )}
 
           {/* FAB CARD */}
