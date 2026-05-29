@@ -31,8 +31,6 @@ import {
   useGarmentStore,
 } from '@/src/store/garmentStore'
 
-import {testInsert} from '@/src/services/testUpload'
-
 const categories = [
   'Todo',
   'Blusas',
@@ -47,12 +45,54 @@ export default function ClosetScreen() {
     useGarmentStore(
       state => state.garments
     )
-
-  useEffect(() => {
-    testInsert()
-  }, [])
+    
+  const setGarments =
+    useGarmentStore(
+      state => state.setGarments
+    )
   
+  useEffect(() => {
+    async function loadGarments() {
+      try {
+        const data =
+          await getGarments()
 
+        const formatted =
+          data.map(
+            garment => ({
+              id: garment.id,
+
+              imageUrl:
+                garment.image_url,
+
+              category:
+                garment.category,
+
+              color:
+                garment.color,
+
+              season:
+                garment.season,
+              
+              style:
+                garment.style,
+
+              createdAt:
+                garment.created_at,
+            })
+          )
+        
+        setGarments(
+          formatted
+        )
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    loadGarments()
+  }, []) 
+  
   return (
     <View style={styles.container}>
       <ScrollView

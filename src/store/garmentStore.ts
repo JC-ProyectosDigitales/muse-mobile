@@ -4,6 +4,10 @@ import { Garment } from '@/src/types/garment'
 interface GarmentStore {
   garments: Garment[]
 
+  setGarments: (
+    garments: Garment[]
+  ) => void
+
   addGarment: (
     garment: Garment
   ) => void
@@ -13,26 +17,31 @@ interface GarmentStore {
   ) => void
 }
 
-export const useGarmentStore =
-  create<GarmentStore>(
-    set => ({
-      garments: [],
+  export const useGarmentStore =
+    create<GarmentStore>(
+      set => ({
+        garments: [],
 
-      addGarment: garment =>
-        set(state => ({
-          garments: [
-            garment,
-            ...state.garments,
-          ],
-        })),
+        setGarments: garments =>
+          set({
+            garments,
+          }),
 
-      removeGarment: id =>
-        set(state => ({
-          garments:
-            state.garments.filter(
-              garment =>
-                garment.id !== id
-            ),
-        })),
-    })
-  )
+        addGarment: garment =>
+          set(state => ({
+            garments: [
+              garment,
+              ...state.garments,
+            ],
+          })),
+
+        removeGarment: id =>
+          set(state => ({
+            garments:
+              state.garments.filter(
+                garment =>
+                  garment.id !== id
+              ),
+          })),
+      })
+    )

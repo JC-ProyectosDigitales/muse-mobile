@@ -1,5 +1,11 @@
 import { supabase } from './supabase'
 
+import * as FileSystem
+  from 'expo-file-system'
+
+import { decode }
+  from 'base64-arraybuffer'
+
 export async function getGarments() {
   const { data, error } =
     await supabase
@@ -56,4 +62,44 @@ export async function createGarment(
   }
 
   return data
+}
+
+export async function uploadImage(
+  imageUri: string
+) {
+  const fileName =
+    `${Date.now()}.jpg`
+
+  const base64 =
+    await FileSystem.readAsStringAsync(
+      imageUri,
+      {
+        encoding:
+          FileSystem.EncodingType.Base64,
+      }
+    )
+
+  const { error } =
+    await supabase.storage
+      .from('garments')
+      .upload(
+        fileName,
+        decode(base64),
+        {
+          contentType:
+            'image/jpeg',
+        }
+      )
+
+  if (error) {
+    throw error
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage
+    .from('garments')
+    .getPublicUrl(fileName)
+
+  return publicUrl
 }
