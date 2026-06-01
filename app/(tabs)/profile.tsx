@@ -98,7 +98,7 @@ export default function ProfileScreen() {
         />
 
         <Text style={styles.name}>
-          Ana Sofia
+          Sophia
         </Text>
 
         <Text style={styles.bio}>

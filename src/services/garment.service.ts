@@ -1,7 +1,7 @@
 import { supabase } from './supabase'
 
 import * as FileSystem
-  from 'expo-file-system'
+  from 'expo-file-system/legacy'
 
 import { decode }
   from 'base64-arraybuffer'
@@ -92,6 +92,11 @@ export async function uploadImage(
       )
 
   if (error) {
+    console.log(
+      'STORAGE ERROR:',
+      error
+    )
+
     throw error
   }
 
@@ -102,4 +107,21 @@ export async function uploadImage(
     .getPublicUrl(fileName)
 
   return publicUrl
+}
+
+export async function getGarmentById(
+  id: string 
+) {
+  const { data, error } =
+    await supabase
+      .from('garments')
+      .select('*')
+      .eq('id', id)
+      .single()
+
+  if (error) {
+    throw error
+  }
+
+  return data
 }

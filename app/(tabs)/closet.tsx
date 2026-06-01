@@ -17,6 +17,8 @@ import {
   useEffect,
 } from 'react'
 
+import { router } from 'expo-router'
+
 import {
   COLORS,
   SPACING,
@@ -40,17 +42,16 @@ const categories = [
 ]
 
 export default function ClosetScreen() {
-
   const garments =
     useGarmentStore(
       state => state.garments
     )
-    
+
   const setGarments =
     useGarmentStore(
       state => state.setGarments
     )
-  
+
   useEffect(() => {
     async function loadGarments() {
       try {
@@ -73,7 +74,7 @@ export default function ClosetScreen() {
 
               season:
                 garment.season,
-              
+
               style:
                 garment.style,
 
@@ -81,7 +82,7 @@ export default function ClosetScreen() {
                 garment.created_at,
             })
           )
-        
+
         setGarments(
           formatted
         )
@@ -91,8 +92,8 @@ export default function ClosetScreen() {
     }
 
     loadGarments()
-  }, []) 
-  
+  }, [])
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -110,7 +111,9 @@ export default function ClosetScreen() {
             Mi clóset
           </Text>
 
-          <View style={styles.headerIcons}>
+          <View
+            style={styles.headerIcons}
+          >
             <Pressable
               style={styles.iconButton}
             >
@@ -176,16 +179,26 @@ export default function ClosetScreen() {
         {/* GRID */}
 
         <View style={styles.grid}>
-          {garments.length > 0 && 
+          {garments.length > 0 &&
             garments.map(
               garment => (
                 <Pressable
                   key={garment.id}
                   style={styles.card}
+                  onPress={() =>
+                    router.push({
+                      pathname:
+                        '/garment/[id]',
+                      params: {
+                        id: garment.id,
+                      },
+                    })
+                  }
                 >
                   <Image
                     source={{
-                      uri: garment.imageUrl,
+                      uri:
+                        garment.imageUrl,
                     }}
                     style={
                       styles.image
@@ -201,15 +214,15 @@ export default function ClosetScreen() {
               style={{
                 width: '100%',
                 textAlign: 'center',
-                color: COLORS.textSecondary,
+                color:
+                  COLORS.textSecondary,
                 marginTop: 30,
               }}
             >
-              Aún no has agregado prendas
+              Aún no has agregado
+              prendas
             </Text>
           )}
-
-          {/* FAB CARD */}
 
           <Pressable
             style={styles.fab}

@@ -11,7 +11,7 @@ export function Header() {
     <View style={styles.container}>
       <View style={styles.textContainer}>
         <Text style={styles.greeting}>
-          Hola, Ana ✨
+          Hola, Sophia ✨
         </Text>
 
         <Text style={styles.title}>
