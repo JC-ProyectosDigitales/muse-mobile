@@ -64,6 +64,89 @@ export async function createGarment(
   return data
 }
 
+export async function updateGarment(
+  id: string,
+  garment: {
+    category?: string
+    color?: string
+    season?: string
+    style?: string
+    description?: string
+    tags?: string[]
+    brand?: string
+    aiProcessed?: boolean
+  }
+) {
+  const { data, error } =
+    await supabase
+      .from('garments')
+      .update({
+        category:
+          garment.category,
+
+          color:
+            garment.color,
+
+            season:
+              garment.season,
+
+            style:
+              garment.style,
+
+            description:
+              garment.description,
+
+            tags:
+              garment.tags,
+
+            brand:
+              garment.brand,
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+  if (error) {
+    throw error
+  }
+
+  return data
+}
+
+export async function deleteGarment(
+  id: string
+) {
+  const garment =
+    await getGarmentById(id)
+
+  if (!garment) {
+    return
+  }
+
+  const fileName =
+    garmemt.image_url
+      .split('/')
+      .pop()
+
+  if (fileName) {
+    await supabase.storage
+      .from('garments')
+      .remove([
+        fileName
+      ])
+  }
+
+  const { error } =
+    await supabase
+      .from('garments')
+      .delete()
+      .eq('id', id)
+
+  if (error) {
+    throw error
+  } 
+}
+
 export async function uploadImage(
   imageUri: string
 ) {

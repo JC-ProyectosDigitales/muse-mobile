@@ -11,5 +11,13 @@ export interface Garment {
 
   style?: string
 
+  description?: string
+
+  tags?: string[]
+
+  brand?: string
+
+  aiProcessed?: boolean
+
   createdAt?: string
 }
