@@ -3,15 +3,8 @@ import {
   Text,
   StyleSheet,
   Image,
-  ScrollView,
   Pressable,
-  Alert,
 } from 'react-native'
-
-import {
-  useEffect,
-  useState,
-} from 'react'
 
 import {
   useLocalSearchParams,
@@ -19,9 +12,8 @@ import {
 } from 'expo-router'
 
 import {
-  getGarmentById,
-  deleteGarment,
-} from '@/src/services/garment.service'
+  ArrowLeft,
+} from 'lucide-react-native'
 
 import {
   COLORS,
@@ -29,155 +21,48 @@ import {
   TYPOGRAPHY,
 } from '@/src/theme'
 
-export default function GarmentDetail() {
+export default function GarmentDetailScreen() {
   const { id } =
-    useLocalSearchParams()
-
-  const [
-    garment,
-    setGarment,
-  ] = useState<any>(null)
-
-  useEffect(() => {
-    async function load() {
-      const data =
-        await getGarmentById(
-          id as string
-        )
-
-      setGarment(data)
-    }
-
-    load()
-  }, [])
-
-  async function handleDelete() {
-    Alert.alert(
-      'Eliminar prenda',
-      '¿Deseas eliminar esta prenda?',
-      [
-        {
-          text:
-            'Cancelar',
-        },
-
-        {
-          text:
-            'Eliminar',
-
-          style:
-            'destructive',
-
-          onPress:
-            async () => {
-              await deleteGarment(
-                id as string
-              )
-
-              router.replace(
-                '/(tabs)/closet'
-              )
-            },
-        },
-      ]
-    )
-  }
-
-  if (!garment) {
-    return (
-      <View
-        style={
-          styles.center
-        }
-      >
-        <Text>
-          Cargando...
-        </Text>
-      </View>
-    )
-  }
+    useLocalSearchParams<{
+      id: string
+    }>()
 
   return (
-    <ScrollView
-      style={
-        styles.container
-      }
-    >
-      <Image
-        source={{
-          uri:
-            garment.image_url,
-        }}
-        style={
-          styles.image
-        }
-      />
-
-      <View
-        style={
-          styles.content
-        }
-      >
-        <Text
-          style={
-            styles.title
-          }
-        >
-          {
-            garment.category
-          }
-        </Text>
-
-        <Text>
-          Color:{' '}
-          {
-            garment.color
-          }
-        </Text>
-
-        <Text>
-          Temporada:{' '}
-          {
-            garment.season
-          }
-        </Text>
-
-        <Text>
-          Estilo:{' '}
-          {
-            garment.style
-          }
-        </Text>
-
+    <View style={styles.container}>
+      <View style={styles.header}>
         <Pressable
-          style={
-            styles.editButton
+          onPress={() =>
+            router.back()
           }
         >
-          <Text>
-            Editar
-          </Text>
+          <ArrowLeft
+            size={24}
+            color={COLORS.text}
+          />
         </Pressable>
 
-        <Pressable
-          style={
-            styles.deleteButton
-          }
-          onPress={
-            handleDelete
-          }
-        >
-          <Text
-            style={{
-              color:
-                'white',
-            }}
-          >
-            Eliminar
-          </Text>
-        </Pressable>
+        <Text style={styles.title}>
+          Detalle de prenda
+        </Text>
       </View>
-    </ScrollView>
+
+      <View style={styles.content}>
+        <Image
+          source={{
+            uri: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=800&auto=format&fit=crop',
+          }}
+          style={styles.image}
+        />
+
+        <Text style={styles.label}>
+          ID:
+        </Text>
+
+        <Text style={styles.value}>
+          {id}
+        </Text>
+      </View>
+    </View>
   )
 }
 
@@ -185,64 +70,48 @@ const styles =
   StyleSheet.create({
     container: {
       flex: 1,
-
       backgroundColor:
         COLORS.background,
-    },
-
-    image: {
-      width: '100%',
-
-      height: 350,
-    },
-
-    content: {
-      padding:
+      paddingTop: 60,
+      paddingHorizontal:
         SPACING.lg,
+    },
+
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 16,
+      marginBottom: 24,
     },
 
     title: {
       fontSize:
-        TYPOGRAPHY.h1.fontSize,
-
-      fontWeight:
-        '700',
-
-      marginBottom: 20,
+        TYPOGRAPHY.h2.fontSize,
+      fontWeight: '700',
+      color: COLORS.text,
     },
 
-    editButton: {
-      marginTop: 30,
-
-      padding: 16,
-
-      borderRadius: 16,
-
-      backgroundColor:
-        COLORS.surface,
+    content: {
+      alignItems: 'center',
     },
 
-    deleteButton: {
-      marginTop: 12,
-
-      padding: 16,
-
-      borderRadius: 16,
-
-      backgroundColor:
-        'red',
-
-      alignItems:
-        'center',
+    image: {
+      width: '100%',
+      height: 320,
+      borderRadius: 24,
+      marginBottom: 24,
     },
 
-    center: {
-      flex: 1,
+    label: {
+      fontSize:
+        TYPOGRAPHY.body.fontSize,
+      fontWeight: '600',
+      color: COLORS.text,
+    },
 
-      justifyContent:
-        'center',
-
-      alignItems:
-        'center',
+    value: {
+      marginTop: 8,
+      color:
+        COLORS.textSecondary,
     },
   })

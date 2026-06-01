@@ -107,13 +107,14 @@ export default function UploadScreen() {
       })
 
       router.push('/closet')
-    } catch (error) {
-      console.log(error)
+    } catch (error: any) {
+      console.log(
+        'UPLOAD ERROR:',
+        error
+      )
 
       Alert.alert(
-        'Error',
-        'No se pudo subir la prenda'
-      )
+        JSON.stringify(error))
     }
   }
 
