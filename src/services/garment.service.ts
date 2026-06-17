@@ -6,6 +6,44 @@ import * as FileSystem
 import { decode }
   from 'base64-arraybuffer'
 
+const GARMENTS_BUCKET = 'garments'
+
+function getStorageFileNameFromUrl(
+  imageUrl: string
+): string | null {
+  try {
+    const url = new URL(imageUrl)
+    const marker = `/${GARMENTS_BUCKET}/`
+    const index =
+      url.pathname.indexOf(marker)
+
+    if (index !== -1) {
+      const path = url.pathname.slice(
+        index + marker.length
+      )
+
+      const fileName = decodeURIComponent(
+        path.split('/').filter(Boolean).join('/')
+      )
+
+      return fileName || null
+    }
+  } catch {
+    // Fall through to legacy parsing.
+  }
+
+  const withoutQuery =
+    imageUrl.split('?')[0]
+
+  const segment = withoutQuery
+    .split('/')
+    .pop()
+
+  return segment
+    ? decodeURIComponent(segment)
+    : null
+}
+
 export async function getGarments() {
   const { data, error } =
     await supabase
@@ -120,31 +158,48 @@ export async function deleteGarment(
     await getGarmentById(id)
 
   if (!garment) {
-    return
+    throw new Error(
+      'La prenda no existe.'
+    )
   }
 
-  const fileName =
-    garmemt.image_url
-      .split('/')
-      .pop()
-
-  if (fileName) {
-    await supabase.storage
-      .from('garments')
-      .remove([
-        fileName
-      ])
-  }
-
-  const { error } =
+  const { data, error } =
     await supabase
       .from('garments')
       .delete()
       .eq('id', id)
+      .select('id')
 
   if (error) {
     throw error
-  } 
+  }
+
+  if (!data?.length) {
+    throw new Error(
+      'No se pudo eliminar la prenda. Falta la política DELETE en Supabase.'
+    )
+  }
+
+  const fileName =
+    getStorageFileNameFromUrl(
+      garment.image_url
+    )
+
+  if (!fileName) {
+    return
+  }
+
+  const { error: storageError } =
+    await supabase.storage
+      .from(GARMENTS_BUCKET)
+      .remove([fileName])
+
+  if (storageError) {
+    console.warn(
+      'Storage cleanup failed:',
+      storageError.message
+    )
+  }
 }
 
 export async function uploadImage(
@@ -164,7 +219,7 @@ export async function uploadImage(
 
   const { error } =
     await supabase.storage
-      .from('garments')
+      .from(GARMENTS_BUCKET)
       .upload(
         fileName,
         decode(base64),
@@ -186,7 +241,7 @@ export async function uploadImage(
   const {
     data: { publicUrl },
   } = supabase.storage
-    .from('garments')
+    .from(GARMENTS_BUCKET)
     .getPublicUrl(fileName)
 
   return publicUrl
