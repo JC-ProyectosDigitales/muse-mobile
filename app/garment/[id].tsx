@@ -6,7 +6,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ScrollView,
   View,
+  Keyboard,
 } from "react-native";
 
 import { useEffect, useState } from "react";
@@ -27,6 +29,10 @@ import { useGarmentStore } from "@/src/store/garmentStore";
 
 import { Garment } from "@/src/types/garment";
 
+import { launchImageLibraryAsync, MediaTypeOptions,} from "expo-image-picker";
+
+import { replaceGarmentImage } from "@/src/services/garment.service";
+
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
     return error.message;
@@ -40,32 +46,64 @@ function getErrorMessage(error: unknown): string {
 }
 
 export default function GarmentDetailScreen() {
-  const { id: rawId } = useLocalSearchParams<{
-    id: string;
-  }>();
+  const { id: rawId } =
+    useLocalSearchParams<{
+      id: string;
+    }>();
 
-  const id = (Array.isArray(rawId) ? rawId[0] : rawId)?.trim();
+  const id =
+    (Array.isArray(rawId)
+      ? rawId[0]
+      : rawId)?.trim();
 
-  const removeGarment = useGarmentStore((state) => state.removeGarment);
+  const removeGarment =
+    useGarmentStore(
+      (state) =>
+        state.removeGarment
+    );
 
-  const updateGarmentStore = useGarmentStore((state) => state.updateGarment);
+  const updateGarmentStore =
+    useGarmentStore(
+      (state) =>
+        state.updateGarment
+    );
 
-  const [garment, setGarment] = useState<Garment | null>(null);
+  const [garment, setGarment] =
+    useState<Garment | null>(
+      null
+    );
 
-  const [loading, setLoading] = useState(true);
+  const [
+    originalGarment,
+    setOriginalGarment,
+  ] = useState<Garment | null>(
+    null
+  )
 
-  const [editing, setEditing] = useState(false);
+  const [loading, setLoading] =
+    useState(true);
 
-  const [saving, setSaving] = useState(false);
+  const [editing, setEditing] =
+    useState(false);
 
-  const [deleting, setDeleting] = useState(false);
+  const [saving, setSaving] =
+    useState(false);
+
+  const [
+    changingImage,
+    setChangingImage
+  ] = useState(false)
+
+  const [deleting, setDeleting] =
+    useState(false);
 
   useEffect(() => {
     async function loadGarment() {
       try {
-        const data = await getGarmentById(id);
+        const data =
+          await getGarmentById(id);
 
-        setGarment({
+        const loaded = {
           id: data.id,
           imageUrl: data.image_url,
           category: data.category,
@@ -73,7 +111,12 @@ export default function GarmentDetailScreen() {
           season: data.season,
           style: data.style,
           createdAt: data.created_at,
-        });
+        }
+
+        setGarment(loaded);
+
+        setOriginalGarment(loaded);
+
       } catch (error) {
         console.log(error);
       } finally {
@@ -110,15 +153,15 @@ export default function GarmentDetailScreen() {
 
               removeGarment(id);
 
-              router.replace("/(tabs)/closet");
-            } catch (error) {
-              Alert.alert("Error", getErrorMessage(error));
+              router.replace(
+                "/(tabs)/closet"
+              );
             } finally {
               setDeleting(false);
             }
           },
         },
-      ],
+      ]
     );
   }
 
@@ -128,49 +171,225 @@ export default function GarmentDetailScreen() {
     }
 
     try {
+      if (
+        !garment
+      ) {
+        return;
+      }
+
+      if (
+        !garment.category
+        ?.trim()
+      ) {
+        Alert.alert(
+          "Campo requerido",
+          "Agrega una categoría"
+        )
+
+        return;
+      }
+
+      if ((garment.color ?? "").length > 30) {
+        Alert.alert("Demasiado largo", "Color máximo 30 caracteres");
+
+        return;
+      }
+
+      if ((garment.style ?? "").length > 40) {
+        Alert.alert("Demasiado largo", "Estilo máximo 40 caracteres");
+
+        return;
+      }
+      
       setSaving(true);
 
-      const updated = await updateGarment(id, {
-        category: garment.category,
+      const updated =
+        await updateGarment(
+          id,
+          {
+            category:
+              garment.category,
 
-        color: garment.color,
+            color:
+              garment.color,
 
-        season: garment.season,
+            season:
+              garment.season,
 
-        style: garment.style,
-      });
+            style:
+              garment.style,
+          }
+        );
 
-      const updatedGarment = {
-        ...garment,
-        ...updated,
-      };
+      const updatedGarment =
+        {
+          ...garment,
 
-      setGarment(updatedGarment);
+          imageUrl:
+            updated.image_url,
 
-      updateGarmentStore(updatedGarment);
+          category:
+            updated.category,
+
+          color:
+            updated.color,
+
+          season:
+            updated.season,
+
+          style:
+            updated.style,
+
+          description:
+            updated.description,
+
+          tags:
+            updated.tags,
+
+          brand:
+            updated.brand,
+
+          aiProcessed:
+            updated.ai_processed,
+
+          createdAt:
+            updated.created_at,
+        };
+
+      setGarment(
+        updatedGarment
+      );
+
+      updateGarmentStore(
+        updatedGarment
+      );
+
+      setOriginalGarment(
+        updatedGarment
+      )
+      
+      Keyboard.dismiss()
 
       setEditing(false);
 
-      Alert.alert("Éxito", "Prenda actualizada");
-    } catch (error) {
-      console.log(error);
-
-      Alert.alert("Error", "No se pudo actualizar");
+      Alert.alert(
+        "Éxito",
+        "Prenda actualizada"
+      );
+    } catch {
+      Alert.alert(
+        "Error",
+        "No se pudo actualizar"
+      );
     } finally {
       setSaving(false);
     }
   }
 
+  const hasChanges =
+    JSON.stringify(
+      garment
+    ) !==
+    JSON.stringify(
+      originalGarment
+    )
+
+    function cancelEdit() {
+      setGarment(
+        originalGarment
+      )
+
+      setEditing(false)
+
+      Keyboard.dismiss()
+    }
+
+  async function handleChangeImage() {
+    if (!id) {
+      return
+    }
+
+    try {
+      const result =
+        await launchImageLibraryAsync({
+          mediaTypes:
+            MediaTypeOptions.Images,
+
+          quality: 0.8,
+        })
+
+      if (result.canceled) {
+        return
+      }
+
+      setChangingImage(true)
+
+      const updated =
+        await replaceGarmentImage(
+          id,
+          result.assets[0].uri
+        )
+
+      const updatedGarment = {
+        ...garment!,
+        imageUrl:
+          updated.image_url,
+      }
+
+      setGarment(
+        updatedGarment
+      )
+
+      updateGarmentStore(
+        updatedGarment
+      )
+
+      Alert.alert(
+        "Éxito",
+        "Imagen actualizada"
+      )
+    } catch (error) {
+      console.log(error)
+
+      Alert.alert(
+        "Error",
+        "No se pudo cambiar la imagen"
+      )
+    } finally {
+      setChangingImage(false)
+    }
+  }
+
+
+  if (loading) {
+    return (
+      <View style={styles.center}>
+        <Text>
+          Cargando...
+        </Text>
+      </View>
+    );
+  }
+
   if (!garment) {
     return (
       <View style={styles.center}>
-        <Text>Prenda no encontrada</Text>
+        <Text>
+          Prenda no encontrada
+        </Text>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={{
+        flex: 1,
+        backgroundColor: COLORS.background,
+      }}
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       <View style={styles.header}>
         <Pressable onPress={() => router.back()}>
           <ArrowLeft size={24} color={COLORS.text} />
@@ -186,18 +405,46 @@ export default function GarmentDetailScreen() {
         style={styles.image}
       />
 
+      <Pressable style={styles.editButton} onPress={handleChangeImage}>
+        {changingImage ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text style={styles.deleteText}>Cambiar foto</Text>
+        )}
+      </Pressable>
+
       <View style={styles.info}>
-        {["category", "color", "season", "style"].map((field) => (
-          <View key={field}>
-            <Text style={styles.label}>{field}</Text>
+        {[
+          {
+            key: "category",
+            label: "Categoría",
+          },
+          {
+            key: "color",
+            label: "Color",
+          },
+          {
+            key: "season",
+            label: "Temporada",
+          },
+          {
+            key: "style",
+            label: "Estilo",
+          },
+        ].map((field) => (
+          <View key={field.key}>
+            <Text style={styles.label}>{field.label}</Text>
 
             <TextInput
               editable={editing}
-              value={(garment[field as keyof Garment] ?? "") as string}
-              onChangeText={(text) =>
+              placeholder={`Agregar ${field.label.toLowerCase()}`}
+              value={(garment[field.key as keyof Garment] ?? "") as string}
+              onChangeText={(
+                text
+              ) =>
                 setGarment((prev) => ({
                   ...prev!,
-                  [field]: text,
+                  [field.key]: text.trimStart(),
                 }))
               }
               style={[styles.input, !editing && styles.inputDisabled]}
@@ -206,138 +453,202 @@ export default function GarmentDetailScreen() {
         ))}
       </View>
 
+      <View
+        style={{
+          gap: 12,
+        }}
+      >
+        <Pressable
+          style={[
+            styles.editButton,
+
+            (!hasChanges || saving) && {
+              opacity: 0.6,
+            },
+          ]}
+          disabled={editing && !hasChanges}
+          onPress={editing ? handleSave : () => setEditing(true)}
+        >
+          {saving ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text style={styles.deleteText}>
+              {editing ? "Guardar cambios" : "Editar"}
+            </Text>
+          )}
+        </Pressable>
+
+        {editing && (
+          <Pressable
+            style={{
+              alignItems: "center",
+            }}
+            onPress={cancelEdit}
+          >
+            <Text>Cancelar</Text>
+          </Pressable>
+        )}
+      </View>
+
       <Pressable
         style={[styles.deleteButton, deleting && styles.deleteButtonDisabled]}
         onPress={handleDelete}
-        disabled={deleting}
       >
-        {deleting ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Trash2 size={18} color="white" />
-        )}
+        <Trash2 size={18} color="white" />
 
-        <Text style={styles.deleteText}>
-          {deleting ? "Eliminando..." : "Eliminar prenda"}
-        </Text>
+        <Text style={styles.deleteText}>Eliminar prenda</Text>
       </Pressable>
-      <Pressable
-        style={styles.editButton}
-        onPress={editing ? handleSave : () => setEditing(true)}
-      >
-        {saving ? (
-          <ActivityIndicator color="white" />
-        ) : (
-          <Text style={styles.deleteText}>
-            {editing ? "Guardar cambios" : "Editar"}
-          </Text>
-        )}
-      </Pressable>
-    </View>
+    </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    paddingTop: 60,
-    paddingHorizontal: SPACING.lg,
-  },
+const styles =
+  StyleSheet.create({
+    container: {
+      paddingTop: 60,
 
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
+      paddingHorizontal:
+        SPACING.lg,
 
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 16,
-    marginBottom: 24,
-  },
+      paddingBottom: 40,
+    },
 
-  title: {
-    fontSize: TYPOGRAPHY.h2.fontSize,
-    fontWeight: "700",
-    color: COLORS.text,
-  },
+    center: {
+      flex: 1,
 
-  image: {
-    width: "100%",
-    height: 320,
-    borderRadius: 24,
-    marginBottom: 24,
-  },
+      justifyContent:
+        "center",
 
-  info: {
-    gap: 8,
-  },
+      alignItems:
+        "center",
+    },
 
-  label: {
-    fontWeight: "700",
-    color: COLORS.text,
-  },
+    header: {
+      flexDirection:
+        "row",
 
-  value: {
-    marginBottom: 12,
-    color: COLORS.textSecondary,
-  },
+      alignItems:
+        "center",
 
-  deleteButton: {
-    marginTop: 24,
-    height: 56,
-    borderRadius: 16,
-    backgroundColor: "#DC2626",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: 8,
-  },
+      gap: 16,
 
-  deleteButtonDisabled: {
-    opacity: 0.7,
-  },
+      marginBottom: 18,
+    },
 
-  deleteText: {
-    color: "white",
-    fontWeight: "700",
-  },
+    title: {
+      fontSize:
+        TYPOGRAPHY.h2
+          .fontSize,
 
-  input: {
-    height: 54,
+      fontWeight:
+        "700",
 
-    borderWidth: 1,
+      color:
+        COLORS.text,
+    },
 
-    borderColor: "#DDD",
+    image: {
+      width: "100%",
 
-    borderRadius: 16,
+      height: 220,
 
-    paddingHorizontal: 16,
+      resizeMode:
+        "contain",
 
-    marginTop: 8,
+      borderRadius: 24,
 
-    marginBottom: 12,
+      marginBottom: 18,
 
-    backgroundColor: "white",
-  },
+      backgroundColor:
+        "#F8F8F8",
+    },
 
-  inputDisabled: {
-    backgroundColor: "#F5F5F5",
-  },
+    info: {
+      gap: 8,
+    },
 
-  editButton: {
-    marginTop: 12,
+    label: {
+      fontWeight:
+        "700",
 
-    height: 56,
+      color:
+        COLORS.text,
+    },
 
-    borderRadius: 16,
+    input: {
+      height: 54,
 
-    backgroundColor: COLORS.primary,
+      borderWidth: 1,
 
-    justifyContent: "center",
+      borderColor:
+        "#DDD",
 
-    alignItems: "center",
-  },
-});
+      borderRadius: 16,
+
+      paddingHorizontal: 16,
+
+      marginTop: 8,
+
+      marginBottom: 12,
+
+      backgroundColor:
+        "white",
+    },
+
+    inputDisabled: {
+      backgroundColor:
+        "#F5F5F5",
+    },
+
+    deleteButton: {
+      marginTop: 12,
+
+      height: 56,
+
+      borderRadius: 16,
+
+      backgroundColor:
+        "#DC2626",
+
+      flexDirection:
+        "row",
+
+      justifyContent:
+        "center",
+
+      alignItems:
+        "center",
+
+      gap: 8,
+    },
+
+    deleteButtonDisabled: {
+      opacity: 0.7,
+    },
+
+    deleteText: {
+      color: "white",
+
+      fontWeight:
+        "700",
+    },
+
+    editButton: {
+      marginTop: 12,
+
+      marginBottom: 24,
+
+      height: 56,
+
+      borderRadius: 16,
+
+      backgroundColor:
+        COLORS.primary,
+
+      justifyContent:
+        "center",
+
+      alignItems:
+        "center",
+    },
+  });

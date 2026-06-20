@@ -263,3 +263,46 @@ export async function getGarmentById(
 
   return data
 }
+
+export async function replaceGarmentImage(
+  id: string,
+  imageUri: string
+) {
+  const oldGarment =
+    await getGarmentById(id)
+
+  const imageUrl =
+    await uploadImage(imageUri)
+
+  const { data, error } =
+    await supabase
+      .from("garments")
+      .update({
+        image_url:
+          imageUrl,
+      })
+      .eq("id", id)
+      .select()
+      .single()
+
+  if (error) {
+    throw error
+  }
+
+  try {
+    const oldFile =
+      oldGarment.image_url
+        ?.split("/")
+        .pop()
+
+    if (oldFile) {
+      await supabase.storage
+        .from("garments")
+        .remove([
+          oldFile,
+        ])
+    }
+  } catch {}
+
+  return data
+}

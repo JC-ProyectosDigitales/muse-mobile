@@ -210,18 +210,19 @@ export default function ClosetScreen() {
             )}
 
           {garments.length === 0 && (
-            <Text
-              style={{
-                width: '100%',
-                textAlign: 'center',
-                color:
-                  COLORS.textSecondary,
-                marginTop: 30,
-              }}
-            >
-              Aún no has agregado
-              prendas
-            </Text>
+            <View style={styles.empty}>
+              <Text style={styles.emptyTitle}>
+                Tu clóset está vacío
+              </Text>
+
+              <Text 
+                style={styles.emptySubtitle
+                }
+              >
+                Sube tu primera prenda
+                para comenzar
+              </Text>
+            </View>
           )}
 
           <Pressable
@@ -240,49 +241,76 @@ export default function ClosetScreen() {
 }
 
 const styles = StyleSheet.create({
+  empty: {
+    width: "100%",
+
+    minHeight: 260,
+
+    justifyContent: "center",
+
+    alignItems: "center",
+
+    paddingHorizontal: 32,
+  },
+
+  emptyTitle: {
+    fontSize: 24,
+
+    fontWeight: "700",
+
+    color: COLORS.text,
+
+    marginBottom: 10,
+  },
+
+  emptySubtitle: {
+    fontSize: 15,
+
+    textAlign: "center",
+
+    color: COLORS.textSecondary,
+
+    lineHeight: 22,
+  },
+  
   container: {
     flex: 1,
 
-    backgroundColor:
-      '#F8F7FB',
+    backgroundColor: "#F8F7FB",
   },
 
   content: {
     paddingTop: 72,
 
-    paddingHorizontal:
-      SPACING.lg,
+    paddingHorizontal: SPACING.lg,
 
     paddingBottom: 140,
   },
 
   header: {
-    flexDirection: 'row',
+    flexDirection: "row",
 
-    justifyContent:
-      'space-between',
+    justifyContent: "space-between",
 
-    alignItems: 'center',
+    alignItems: "center",
 
     marginBottom: 28,
   },
 
   title: {
-    fontSize:
-      TYPOGRAPHY.h1.fontSize,
+    fontSize: TYPOGRAPHY.h1.fontSize,
 
-    lineHeight:
-      TYPOGRAPHY.h1.lineHeight,
+    lineHeight: TYPOGRAPHY.h1.lineHeight,
 
-    fontWeight: '700',
+    fontWeight: "700",
 
     color: COLORS.text,
   },
 
   headerIcons: {
-    flexDirection: 'row',
+    flexDirection: "row",
 
-    alignItems: 'center',
+    alignItems: "center",
 
     gap: 14,
   },
@@ -294,10 +322,9 @@ const styles = StyleSheet.create({
 
     borderRadius: 20,
 
-    justifyContent:
-      'center',
+    justifyContent: "center",
 
-    alignItems: 'center',
+    alignItems: "center",
   },
 
   categoriesContainer: {
@@ -311,68 +338,59 @@ const styles = StyleSheet.create({
 
     borderRadius: 12,
 
-    justifyContent:
-      'center',
+    justifyContent: "center",
 
-    alignItems: 'center',
+    alignItems: "center",
 
     marginRight: 10,
 
-    backgroundColor:
-      COLORS.white,
+    backgroundColor: COLORS.white,
   },
 
   categoryButtonActive: {
-    backgroundColor:
-      COLORS.primary,
+    backgroundColor: COLORS.primary,
   },
 
   categoryText: {
-    fontSize:
-      TYPOGRAPHY.caption.fontSize,
+    fontSize: TYPOGRAPHY.caption.fontSize,
 
-    fontWeight: '500',
+    fontWeight: "500",
 
-    color:
-      COLORS.textSecondary,
+    color: COLORS.textSecondary,
   },
 
   categoryTextActive: {
     color: COLORS.white,
 
-    fontWeight: '600',
+    fontWeight: "600",
   },
 
   grid: {
-    flexDirection: 'row',
+    flexDirection: "row",
 
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
 
-    justifyContent:
-      'space-between',
+    justifyContent: "space-between",
 
     rowGap: 14,
   },
 
   card: {
-    width: '31%',
+    width: "31%",
 
     aspectRatio: 0.82,
 
-    backgroundColor:
-      '#FAFAFA',
+    backgroundColor: "#FAFAFA",
 
     borderRadius: 18,
 
     padding: 12,
 
-    justifyContent:
-      'center',
+    justifyContent: "center",
 
-    alignItems: 'center',
+    alignItems: "center",
 
-    shadowColor:
-      COLORS.black,
+    shadowColor: COLORS.black,
 
     shadowOffset: {
       width: 0,
@@ -387,28 +405,25 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: '100%',
+    width: "100%",
 
-    height: '100%',
+    height: "100%",
   },
 
   fab: {
-    width: '31%',
+    width: "31%",
 
     aspectRatio: 0.82,
 
     borderRadius: 22,
 
-    backgroundColor:
-      COLORS.primary,
+    backgroundColor: COLORS.primary,
 
-    justifyContent:
-      'center',
+    justifyContent: "center",
 
-    alignItems: 'center',
+    alignItems: "center",
 
-    shadowColor:
-      COLORS.primary,
+    shadowColor: COLORS.primary,
 
     shadowOffset: {
       width: 0,
@@ -421,4 +436,4 @@ const styles = StyleSheet.create({
 
     elevation: 8,
   },
-})
+});
