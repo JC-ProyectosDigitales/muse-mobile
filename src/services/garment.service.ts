@@ -306,3 +306,41 @@ export async function replaceGarmentImage(
 
   return data
 }
+
+export async function toggleFavorite(
+  id: string,
+  favorite: boolean
+) {
+  const { data, error } =
+    await supabase
+      .from("garments")
+      .update({
+        is_favorite: favorite,
+      })
+      .eq("id", id)
+      .select()
+      .single()
+
+  if (error) {
+    throw error
+  }
+
+  return data
+}
+
+export async function getFavoriteGarments() {
+  const { data, error } =
+    await supabase
+      .from("garments")
+      .select("*")
+      .eq("is_favorite", true)
+      .order("created_at", {
+        ascending: false,
+      })
+
+  if (error) {
+    throw error
+  }
+
+  return data
+}

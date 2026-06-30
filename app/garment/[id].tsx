@@ -15,7 +15,7 @@ import { useEffect, useState } from "react";
 
 import { router, useLocalSearchParams } from "expo-router";
 
-import { ArrowLeft, Trash2 } from "lucide-react-native";
+import { ArrowLeft, Trash2, Heart } from "lucide-react-native";
 
 import { COLORS, SPACING, TYPOGRAPHY } from "@/src/theme";
 
@@ -23,6 +23,7 @@ import {
   deleteGarment,
   getGarmentById,
   updateGarment,
+  toggleFavorite,
 } from "@/src/services/garment.service";
 
 import { useGarmentStore } from "@/src/store/garmentStore";
@@ -286,6 +287,36 @@ export default function GarmentDetailScreen() {
     }
   }
 
+  async function handleFavorite() {
+  if (!garment) {
+    return
+  }
+
+  try {
+    const updated =
+      await toggleFavorite(
+        garment.id,
+        !garment.isFavorite
+      )
+
+    const next = {
+      ...garment,
+      isFavorite:
+        updated.is_favorite,
+    }
+
+    setGarment(next)
+
+    updateGarmentStore(next)
+
+  } catch {
+    Alert.alert(
+      "Error",
+      "No se pudo actualizar favorito"
+    )
+  }
+}
+
   const hasChanges =
     JSON.stringify(
       garment
@@ -398,12 +429,33 @@ export default function GarmentDetailScreen() {
         <Text style={styles.title}>Detalle</Text>
       </View>
 
-      <Image
-        source={{
-          uri: garment.imageUrl,
-        }}
-        style={styles.image}
-      />
+      <View style={styles.imageContainer}>
+        <Image
+          source={{
+            uri: garment.imageUrl,
+          }}
+          style={styles.image}
+        />
+
+        <Pressable
+          style={styles.favoriteButton}
+          onPress={handleFavorite}
+        >
+          <Heart
+            size={20}
+            fill={
+              garment.isFavorite
+                ? "#EF4444"
+                : "transparent"
+            }
+            color={
+              garment.isFavorite
+                ? "#EF4444"
+                : COLORS.text
+            }
+          />
+        </Pressable>
+      </View>
 
       <Pressable style={styles.editButton} onPress={handleChangeImage}>
         {changingImage ? (
@@ -561,6 +613,45 @@ const styles =
 
       backgroundColor:
         "#F8F8F8",
+    },
+
+    imageContainer: {
+      position: "relative",
+
+      marginBottom: 24,
+    },
+
+    favoriteButton: {
+      position: "absolute",
+
+      top: 14,
+
+      right: 14,
+
+      width: 48,
+
+      height: 48,
+
+      borderRadius: 999,
+
+      backgroundColor: "rgba(255,255,255,.95)",
+
+      justifyContent: "center",
+
+      alignItems: "center",
+
+      shadowColor: "#000",
+
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+
+      shadowOpacity: 0.12,
+
+      shadowRadius: 10,
+
+      elevation: 8,
     },
 
     info: {

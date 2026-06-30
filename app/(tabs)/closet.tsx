@@ -80,6 +80,9 @@ export default function ClosetScreen() {
 
               createdAt:
                 garment.created_at,
+
+              isFavorite:
+                garment.is_favorite,
             })
           )
 

@@ -19,5 +19,7 @@ export interface Garment {
 
   aiProcessed?: boolean
 
+  isFavorite?: boolean
+
   createdAt?: string
 }
