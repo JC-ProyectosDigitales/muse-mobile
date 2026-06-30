@@ -1,136 +1,100 @@
 import {
+  Image,
+  Pressable,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  Image,
-  Pressable,
-} from 'react-native'
+} from "react-native";
 
-import {
-  Shirt,
-  Sparkles,
-  Heart,
-  CalendarDays,
-} from 'lucide-react-native'
+import { CalendarDays, Heart, Shirt, Sparkles } from "lucide-react-native";
 
-import { Header } from '@/src/components/home/Header'
+import { Header } from "@/src/components/home/Header";
 
-import {
-  COLORS,
-  SPACING,
-  TYPOGRAPHY,
-  RADIUS,
-} from '@/src/theme'
+import { COLORS, RADIUS, SPACING, TYPOGRAPHY } from "@/src/theme";
+
+import { router } from "expo-router";
 
 export default function HomeScreen() {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={
-        styles.content
-      }
-      showsVerticalScrollIndicator={
-        false
-      }
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
     >
       <Header />
 
-      <Text style={styles.subtitle}>
-        Lista para crear
-      </Text>
+      <Text style={styles.subtitle}>Lista para crear</Text>
 
-      <Text style={styles.heading}>
-        algo increíble hoy?
-      </Text>
+      <Text style={styles.heading}>algo increíble hoy?</Text>
 
       <Pressable style={styles.suggestionCard}>
         <View style={styles.suggestionContent}>
-          <Text style={styles.suggestionLabel}>
-            Sugerencia del día
-          </Text>
+          <Text style={styles.suggestionLabel}>Sugerencia del día</Text>
 
-          <Text style={styles.suggestionLink}>
-            Ver outfit →
-          </Text>
+          <Text style={styles.suggestionLink}>Ver outfit →</Text>
         </View>
 
         <Image
           source={{
-            uri: 'https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1200&auto=format&fit=crop',
+            uri: "https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=1200&auto=format&fit=crop",
           }}
           style={styles.suggestionImage}
         />
       </Pressable>
 
-      <Text style={styles.sectionTitle}>
-        Accesos rápidos
-      </Text>
+      <Text style={styles.sectionTitle}>Accesos rápidos</Text>
 
       <View style={styles.grid}>
-        <Pressable style={styles.quickCard}>
-          <Shirt
-            size={22}
-            color={COLORS.text}
-            strokeWidth={1.8}
-          />
+        <Pressable
+          style={styles.quickCard}
+          onPress={() => router.push("/closet")}
+        >
+          <Shirt size={22} color={COLORS.text} strokeWidth={1.8} />
 
-          <Text style={styles.quickText}>
-            Mi clóset
-          </Text>
+          <Text style={styles.quickText}>Mi clóset</Text>
         </Pressable>
 
-        <Pressable style={styles.quickCard}>
-          <Sparkles
-            size={22}
-            color={COLORS.text}
-            strokeWidth={1.8}
-          />
+        <Pressable
+          style={styles.quickCard}
+          onPress={() => router.push("/outfits")}
+        >
+          <Sparkles size={22} color={COLORS.text} strokeWidth={1.8} />
 
-          <Text style={styles.quickText}>
-            Outfits
-          </Text>
+          <Text style={styles.quickText}>Outfits</Text>
         </Pressable>
 
-        <Pressable style={styles.quickCard}>
-          <Heart
-            size={22}
-            color={COLORS.text}
-            strokeWidth={1.8}
-          />
+        <Pressable
+          style={styles.quickCard}
+          onPress={() => router.push("/favorites")}
+        >
+          <Heart size={22} color={COLORS.text} strokeWidth={1.8} />
 
-          <Text style={styles.quickText}>
-            Favoritos
-          </Text>
+          <Text style={styles.quickText}>Favoritos</Text>
         </Pressable>
 
-        <Pressable style={styles.quickCard}>
-          <CalendarDays
-            size={22}
-            color={COLORS.text}
-            strokeWidth={1.8}
-          />
+        <Pressable
+          style={styles.quickCard}
+          onPress={() => router.push("/calendar")}
+        >
+          <CalendarDays size={22} color={COLORS.text} strokeWidth={1.8} />
 
-          <Text style={styles.quickText}>
-            Calendario
-          </Text>
+          <Text style={styles.quickText}>Calendario</Text>
         </Pressable>
       </View>
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:
-      COLORS.background,
+    backgroundColor: COLORS.background,
   },
 
   content: {
     paddingTop: 35,
-    paddingHorizontal:
-      SPACING.lg,
+    paddingHorizontal: SPACING.lg,
 
     paddingBottom: 140,
   },
@@ -148,7 +112,7 @@ const styles = StyleSheet.create({
 
     color: COLORS.text,
 
-    fontWeight: '700',
+    fontWeight: "700",
 
     marginBottom: SPACING.xl,
   },
@@ -156,8 +120,7 @@ const styles = StyleSheet.create({
   suggestionCard: {
     height: 170,
 
-    backgroundColor:
-      '#E9DDFC',
+    backgroundColor: "#E9DDFC",
 
     borderRadius: RADIUS.xl,
 
@@ -165,11 +128,11 @@ const styles = StyleSheet.create({
 
     marginBottom: SPACING.xl,
 
-    overflow: 'hidden',
+    overflow: "hidden",
 
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 
   suggestionContent: {
@@ -182,7 +145,7 @@ const styles = StyleSheet.create({
 
     color: COLORS.text,
 
-    fontWeight: '600',
+    fontWeight: "600",
 
     marginBottom: 10,
   },
@@ -197,9 +160,9 @@ const styles = StyleSheet.create({
     width: 150,
     height: 185,
 
-    resizeMode: 'cover',
+    resizeMode: "cover",
 
-    position: 'absolute',
+    position: "absolute",
     right: -8,
     bottom: 0,
   },
@@ -209,22 +172,21 @@ const styles = StyleSheet.create({
 
     color: COLORS.text,
 
-    fontWeight: '700',
+    fontWeight: "700",
 
     marginBottom: SPACING.lg,
   },
 
   grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
   },
 
   quickCard: {
-    width: '48%',
+    width: "48%",
 
-    backgroundColor:
-      COLORS.surface,
+    backgroundColor: COLORS.surface,
 
     borderRadius: RADIUS.xl,
 
@@ -234,7 +196,7 @@ const styles = StyleSheet.create({
     marginBottom: SPACING.md,
 
     borderWidth: 1,
-    borderColor: '#F3F3F3',
+    borderColor: "#F3F3F3",
 
     gap: 14,
   },
@@ -244,6 +206,6 @@ const styles = StyleSheet.create({
 
     color: COLORS.text,
 
-    fontWeight: '600',
+    fontWeight: "600",
   },
-})
+});

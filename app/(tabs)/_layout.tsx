@@ -171,6 +171,19 @@ export default function TabsLayout() {
           ),
         }}
       />
+      <Tabs.Screen
+          name="favorites"
+          options={{
+            href: null,
+          }}
+        />
+
+        <Tabs.Screen
+          name="calendar"
+          options={{
+            href: null,
+          }}
+        />
     </Tabs>
   )
 }
